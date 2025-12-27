@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Track Sales | IBA Real Estate</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css">
+  <!-- Chart.js CDN for Graphs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <style>
+    /* Global Professional Styles */
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.6; color: #1f2937; background-color: #f8fafc; }
+    .dashboard { max-width: 1200px; }
+    h1 { font-size: 2rem; font-weight: 600; color: #111827; margin-bottom: 0.5rem; }
+    .text-gray-600 { color: #6b7280; font-size: 0.95rem; margin-bottom: 2rem; }
+
+    /* Toast Styles (for errors) */
+    #toast-container { position: fixed; top: 20px; right: 20px; z-index: 10000; }
+    .toast { padding: 12px 20px; border-radius: 8px; color: white; font-weight: 500; box-shadow: 0 4px 12px rgba(0,0,0,0.15); max-width: 350px; margin-bottom: 10px; animation: slideIn 0.3s ease-out; }
+    .toast.error { background-color: #ef4444; }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+    /* Stats Grid */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .stat-card { background: white; padding: 1.25rem; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05); text-align: center; transition: transform 0.2s ease, box-shadow 0.2s ease; border: 1px solid #f1f5f9; }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .stat-card h3 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; color: #111827; }
+    .stat-card .label { color: #6b7280; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
+    .stat-card span.material-icons { font-size: 1.5rem; margin-top: 0.5rem; display: block; }
+    .stat-card.pending { border-left: 4px solid #f59e0b; }
+    .stat-card.sold { border-left: 4px solid #10b981; }
+    .stat-card.customers { border-left: 4px solid #3b82f6; }
+
+    /* Property Types Grid */
+    .property-types-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+    .property-types-grid .stat-card { padding: 1rem; }
+
+    /* Charts Grid - Reduced and Professional */
+    .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .chart-container { background: white; padding: 1rem; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; transition: box-shadow 0.2s ease; }
+    .chart-container:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .chart-container h3 { margin-bottom: 0.75rem; text-align: center; font-size: 0.9rem; font-weight: 500; color: #374151; }
+    .chart-wrapper { position: relative; height: 80px; width: 100%; } /* Fixed small height for graphs */
+    @media (max-width: 768px) { 
+      .charts-grid { grid-template-columns: 1fr; gap: 0.5rem; } 
+      .stats-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+      .property-types-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app" role="application">
+    <!-- Sidebar (Admin Links, Active on Track Sales) -->
+    <aside class="sidebar" aria-label="Main navigation">
+      <nav aria-label="Primary navigation">
+          <a href="track-sales.html" tabindex="0" aria-label="Track Sales" class="active">
+        <span class="material-icons" aria-hidden="true">assessment</span>DASHBOARD
+      </a>
+
+        <a href="index.html"  tabindex="0" aria-current="page" aria-label="Home">
+          <span class="material-icons" aria-hidden="true">home</span>Avialable properties
+        </a>
+        <!--<a href="buy-page.html" tabindex="0" aria-label="Buy Homes">
+          <span class="material-icons" aria-hidden="true">support_agent</span>Buy
+        </a>
+        <a href="rent-page.html" tabindex="0" aria-label="Rent Homes">
+          <span class="material-icons" aria-hidden="true">key</span>Rent
+        </a>-->
+        <a href="sell-page.html" tabindex="0" aria-label="Sell Homes" >
+          <span class="material-icons" aria-hidden="true" >sell</span>Sell
+        </a>
+       <!-- <a href="home-improvemet-page.html" tabindex="0" aria-label="Home Improvement">
+          <span class="material-icons" aria-hidden="true">home_repair_service</span>Home Improvement
+        </a>
+        <a href="message-page.html" tabindex="0" aria-label="Messages">
+          <span class="material-icons" aria-hidden="true">message</span>Messages
+          
+        </a>-->
+       
+
+          <% if (isAdmin) { %> <a href="sales-approval.html" tabindex="0" aria-label="Sales Approval">
+        <span class="material-icons" aria-hidden="true">check_circle</span>Sales Approval
+      </a>
+      <a href="tour-requested.html" tabindex="0" aria-label="Tour Requested">
+        <span class="material-icons" aria-hidden="true">event_available</span>Tour Requested
+      </a>
+      <a href="view-customers.html" tabindex="0" aria-label="View All Customers">
+        <span class="material-icons" aria-hidden="true">people</span>View All Customers
+      </a>
+       
+    
+
+       <a href="sold-properties" tabindex="0" aria-label="Track Sales" >
+        <span class="material-icons" aria-hidden="true">check_circle</span>Sold property
+      </a>
+
+       <a href="setting-page.html" tabindex="0" aria-label="Settings">
+          <span class="material-icons" aria-hidden="true">settings</span>Settings
+        </a>  <% } %>
+        
+
+
+ <!-- <div class="admin-dropdown">
+    <button class="dropdown-toggle" aria-expanded="false" aria-controls="admin-menu">
+      <span class="material-icons" aria-hidden="true">admin_panel_settings</span>Admin
+      <span class="material-icons dropdown-icon">expand_more</span>
+    </button>
+    <div class="dropdown-menu" id="admin-menu">
+      <a href="sales-approval.html" tabindex="0" aria-label="Sales Approval">
+        <span class="material-icons" aria-hidden="true">check_circle</span>Sales Approval
+      </a>
+      <a href="tour-requested.html" tabindex="0" aria-label="Tour Requested">
+        <span class="material-icons" aria-hidden="true">event_available</span>Tour Requested
+      </a>
+      <a href="view-customers.html" tabindex="0" aria-label="View All Customers">
+        <span class="material-icons" aria-hidden="true">people</span>View All Customers
+      </a>
+       
+                        <a href="track-sales.html" tabindex="0" aria-label="Track Sales">
+                            <span class="material-icons" aria-hidden="true">assessment</span>Track Sales
+                        </a>
+                   
+    </div>
+  </div>-->
+  
+  
+      </nav>
+      <footer>&copy; 2025 IBA Real Estate. All rights reserved.</footer>
+    </aside>
+
+    <!-- Header -->
+    <header role="banner" aria-label="Primary header">
+      <div class="header-left">
+        <button class="sidebar-toggle-btn material-icons" aria-label="Toggle navigation">menu</button>
+        <a href="#" class="logo"><span class="material-icons" aria-hidden="true">apartment</span>IBA Real Estate</a>
+        <nav class="primary-nav">
+          <a href="/sell-page.html">Sell</a>
+          <a href="/track-sales" class="active">Track Sales</a>
+        </nav>
+      </div>
+      <div class="header-right">
+        <button class="icon-btn"><a href="notificatin-page.html"><span class="material-icons">notifications</span></a></button>
+        <button class="icon-btn"><a href="profile-page.html"><span class="material-icons">person</span></a></button>
+      </div>
+    </header>
+
+    <main role="main" aria-label="Track sales dashboard">
+      <div class="dashboard">
+        <h1 class="text-3xl font-bold mb-4">Track Sales Dashboard</h1>
+        <p class="text-gray-600 mb-6">Overview of sales, properties, and customers.</p>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card pending">
+            <h3><%= stats.pendingSales %></h3>
+            <div class="label">Pending Sales</div>
+            <span class="material-icons" style="color: #f59e0b;">pending</span>
+          </div>
+          <div class="stat-card sold">
+            <h3><%= stats.allSales %></h3>
+            <div class="label">All Sales</div>
+            <span class="material-icons" style="color: #10b981;">check_circle</span>
+          </div>
+          <div class="stat-card sold">
+            <h3><%= stats.soldProperties %></h3>
+            <div class="label">Sold Properties</div>
+            <span class="material-icons" style="color: #10b981;">home</span>
+          </div>
+          <div class="stat-card customers">
+            <h3><%= stats.customers %></h3>
+            <div class="label">All Customers</div>
+            <span class="material-icons" style="color: #3b82f6;">people</span>
+          </div>
+          <div class="stat-card sold">
+            <h3><%= stats.soldThisMonth %></h3>
+            <div class="label">Sold This Month</div>
+            <span class="material-icons" style="color: #10b981;">trending_up</span>
+          </div>
+        </div>
+
+        <!-- Property Types Counts -->
+        <div class="property-types-grid">
+          <% stats.propertyTypes.forEach(type => { %>
+            <div class="stat-card">
+              <h3><%= type.count %></h3>
+              <div class="label"><%= type.type %></div>
+            </div>
+          <% }) %>
+          <% if (stats.propertyTypes.length === 0) { %>
+            <div class="stat-card" style="grid-column: 1 / -1; text-align: center;">
+              <h3>0</h3>
+              <div class="label">No Properties Found</div>
+            </div>
+          <% } %>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="charts-grid" >
+          <!-- Bar Chart: Sales Comparison -->
+          <div class="chart-container">
+            <h3>Sales Comparison</h3> 
+            <div class="chart-wrapper" style="height:500px">
+              <canvas id="salesBarChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Pie Chart: Property Types -->
+          <div class="chart-container">
+            <h3>Property Types Distribution</h3>
+            <div class="chart-wrapper" style="height:500px">
+              <canvas id="propertyPieChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Line Chart: Monthly Sold (Full Width Below) -->
+          <div class="chart-container" style="grid-column: 1 / -1; " >
+            <h3>Monthly Sold Properties (Last 12 Months)</h3>
+            <div class="chart-wrapper" style="height: 300px;" > <!-- Slightly taller for line chart readability -->
+              <canvas id="monthlyLineChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer role="contentinfo" aria-label="Website footer">
+      <div style="text-align: center; padding: 1rem; color: #6b7280; border-top: 1px solid #e5e7eb;">© 2025 IBA Real Estate. All rights reserved.</div>
+      <div class="social-links" style="text-align: center; padding-bottom: 1rem;">
+        <a href="#" target="_blank" rel="noopener" style="margin: 0 0.5rem; color: #6b7280; text-decoration: none;"><span class="material-icons" style="font-size: 1.2rem;">facebook</span></a>
+        <a href="#" target="_blank" rel="noopener" style="margin: 0 0.5rem; color: #6b7280; text-decoration: none;"><span class="material-icons" style="font-size: 1.2rem;">twitter</span></a>
+        <a href="#" target="_blank" rel="noopener" style="margin: 0 0.5rem; color: #6b7280; text-decoration: none;"><span class="material-icons" style="font-size: 1.2rem;">camera_alt</span></a>
+        <a href="#" target="_blank" rel="noopener" style="margin: 0 0.5rem; color: #6b7280; text-decoration: none;"><span class="material-icons" style="font-size: 1.2rem;">linkedin</span></a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" aria-live="assertive" role="alert"></div>
+
+  <script src="/js/script.js"></script>
+<!-- Chart.js Initialization -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Professional Color Palette for Charts
+    const primaryBlue = 'rgba(59, 130, 246, 1)';
+    const successGreen = 'rgba(16, 185, 129, 1)';
+    const warningOrange = 'rgba(245, 158, 11, 1)';
+    const gray = 'rgba(107, 114, 128, 1)';
+
+    // Bar Chart: Sales Comparison (Reduced Size)
+    const salesCtx = document.getElementById('salesBarChart').getContext('2d');
+    new Chart(salesCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Pending', 'All Sales', 'This Month'],
+        datasets: [{
+          label: 'Count',
+          data: [<%= stats.pendingSales %>, <%= stats.allSales %>, <%= stats.soldThisMonth %>],
+          backgroundColor: [warningOrange.replace('1', '0.7'), successGreen.replace('1', '0.7'), primaryBlue.replace('1', '0.7')],
+          borderColor: [warningOrange, successGreen, primaryBlue],
+          borderWidth: 1,
+          borderRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { mode: 'index', intersect: false, backgroundColor: 'rgba(0,0,0,0.8)', titleFont: { size: 12 }, bodyFont: { size: 11 } }
+        },
+        scales: {
+          y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 8 } } },
+          x: { grid: { display: false }, ticks: { font: { size: 8 } } }
+        },
+        animation: { duration: 800, easing: 'easeOutQuart' }
+      }
+    });
+
+    // Pie Chart: Property Types Distribution (Reduced Size)
+    const propertyCtx = document.getElementById('propertyPieChart').getContext('2d');
+    const propertyLabels = [];
+    const propertyData = [];
+    const propertyColors = [successGreen.replace('1', '0.7'), primaryBlue.replace('1', '0.7'), warningOrange.replace('1', '0.7'), gray.replace('1', '0.7')];
+
+    <% if (stats.propertyTypes && stats.propertyTypes.length > 0) { %>
+      <% stats.propertyTypes.forEach((type, index) => { %>
+        propertyLabels.push('<%= type.type %>');
+        propertyData.push(<%= type.count %>);
+      <% }) %>
+    <% } else { %>
+      propertyLabels.push('No Data');
+      propertyData.push(1);
+    <% } %>
+
+    new Chart(propertyCtx, {
+      type: 'doughnut',  // Changed to doughnut for a more modern, compact look
+      data: {
+        labels: propertyLabels,
+        datasets: [{
+          data: propertyData,
+          backgroundColor: propertyColors.slice(0, propertyLabels.length),
+          borderColor: propertyColors.slice(0, propertyLabels.length).map(c => c.replace('0.7', '1')),
+          borderWidth: 2,
+          borderRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom', labels: { font: { size: 9 }, padding: 10, usePointStyle: true } },
+          tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${ctx.parsed}%` }, backgroundColor: 'rgba(0,0,0,0.8)', titleFont: { size: 12 }, bodyFont: { size: 11 } }
+        },
+        cutout: '50%',  // Doughnut style for professionalism
+        animation: { duration: 800, easing: 'easeOutQuart' }
+      }
+    });
+
+    // Line Chart: Monthly Sold Properties (Reduced Size)
+    const monthlyCtx = document.getElementById('monthlyLineChart').getContext('2d');
+    const monthlyLabels = [];
+    const monthlyData = [];
+
+    <% if (stats.monthlySold && stats.monthlySold.length > 0) { %>
+      <% stats.monthlySold.forEach(month => { %>
+        monthlyLabels.push('<%= month.month.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) %>');
+        monthlyData.push(<%= month.count %>);
+      <% }) %>
+    <% } else { %>
+      monthlyLabels.push('No Data');
+      monthlyData.push(0);
+    <% } %>
+
+    new Chart(monthlyCtx, {
+      type: 'line',
+      data: {
+        labels: monthlyLabels,
+        datasets: [{
+          label: 'Sold Properties',
+          data: monthlyData,
+          borderColor: primaryBlue,
+          backgroundColor: primaryBlue.replace('1', '0.1'),
+          borderWidth: 2,
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: primaryBlue,
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 2,  // Even smaller points
+          pointHoverRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: true, position: 'top', labels: { font: { size: 9 }, padding: 5 } }
+        },
+        scales: {
+          y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 8 } } },
+          x: { grid: { display: false }, ticks: { font: { size: 8 }, maxRotation: 45 } }
+        },
+        animation: { duration: 800, easing: 'easeOutQuart' }
+      }
+    });
+
+    // Sidebar Toggle (if not in script.js)
+    const sidebarToggle = document.querySelector('.sidebar-toggle-btn');
+    const sidebar = document.querySelector('.sidebar');
+    if (sidebarToggle && sidebar) {
+      sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('hidden');
+      });
+    }
+
+    // No need for manual resize height setting; wrappers handle fixed small sizes responsively
+  });
+</script>
+
+<!-- Toast Handling Script (For Errors from Redirects) -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const error = urlParams.get('error');
+
+    const toastContainer = document.getElementById('toast-container');
+
+    function showToast(message, type) {
+      if (!toastContainer) return;
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      toast.setAttribute('role', 'alert');
+      toast.setAttribute('aria-live', 'assertive');
+      toastContainer.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.animation = 'slideOut 0.3s ease-in';
+        setTimeout(() => {
+          if (toast.parentNode) toast.parentNode.removeChild(toast);
+        }, 300);
+      }, 5000);
+    }
+
+    if (error) {
+      showToast(decodeURIComponent(error), 'error');
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  });
+</script>
+</body>
+</html>

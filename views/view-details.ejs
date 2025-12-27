@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IBA REAL ESTATE | Find Your Dream Property</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1e40af;
+            --secondary: #1e3a8a;
+            --accent: #e11d48;
+            --light: #f8fafc;
+            --dark: #1e293b;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark);
+        }
+        
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c508aef0-e613-4cce-bfc0-4b16690c06f3.png') no-repeat center center;
+            background-size: cover;
+            height: 90vh;
+        }
+        
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .input-highlight:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.2);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(30, 64, 175, 0.1);
+        }
+        
+        .testimonial-card {
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Dropdown Styles */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.95);
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+        }
+        
+        .dropdown-icon {
+            transition: transform 0.2s ease-in-out;
+        }
+        
+        .dropdown-icon.rotated {
+            transform: rotate(180deg);
+        }
+        
+        @media (max-width: 768px) {
+            .hero-section {
+                height: 70vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center"> <!-- Left side: Logo + Nav Links -->
+                    <div class="flex-shrink-0 flex items-center">
+                        <div class="h-10 w-10 rounded-full bg-blue-700 flex items-center justify-center overflow-hidden">
+                            <img src="/img/Screenshot_20250927-131850_WhatsAppBusiness[1].jpg" 
+                                alt="Logo or Profile Image" 
+                                class="w-full h-full rounded-full object-cover">
+                        </div>
+                        <span class="ml-2 text-xl font-semibold text-blue-800">IBA REAL ESTATE</span>
+                    </div>
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8 ml-6"> <!-- Nav Links + Dropdown -->
+                        <a href="/" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Home</a>
+                        <!--<a href="#properties" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Properties</a>
+                        <a href="#agents" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Agents</a>
+                        <a href="#about" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">About</a>
+                        <a href="#contact" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Contact</a>-->
+                        
+                        <!-- Professional Service Dropdown -->
+                        <div class="admin-dropdown relative inline-block">
+                            <button id="service-toggle" class="dropdown-toggle flex items-center px-1 pt-1 border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200" aria-expanded="false" aria-controls="service-menu">
+                                <i class="fas fa-tools text-base mr-1" aria-hidden="true"></i>Services
+                                <i class="fas fa-chevron-down dropdown-icon text-sm ml-1"></i>
+                            </button>
+                            <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50" id="service-menu" role="menu" aria-labelledby="service-toggle">
+                                <!--<a href="costumer-sell-page.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex items-center transition duration-150" role="menuitem" tabindex="-1" aria-label="Sell Properties">
+                                    <i class="fas fa-tag text-base mr-3" aria-hidden="true"></i>Sell
+                                </a>-->
+                                <a href="/customer-buy-page.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex items-center transition duration-150" role="menuitem" tabindex="-1" aria-label="Buy Properties">
+                                    <i class="fas fa-shopping-cart text-base mr-3" aria-hidden="true"></i>Buy
+                                </a>
+                                <a href="/customer-rent-page.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex items-center transition duration-150" role="menuitem" tabindex="-1" aria-label="Rent Properties">
+                                    <i class="fas fa-key text-base mr-3" aria-hidden="true"></i>Rent
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right side: Login Button (Desktop) -->
+                <div class="hidden sm:flex sm:items-center">
+                     <a href="login"><button class="bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-md text-white font-medium transition duration-300">Login / Register</button></a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <div class="-mr-2 flex items-center sm:hidden">
+                    <button type="button" id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu, show/hide based on menu state. -->
+         <div class="sm:hidden hidden" id="mobile-menu">
+            <div class="pt-2 pb-3 space-y-1">
+                <!--<a href="/" class="bg-blue-50 border-blue-500 text-blue-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Home</a>
+                <a href="customer-buy-page.html" class="border-blue-500 text-blue-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Buy Properties</a>
+                <a href="customer-rent-page.html" class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Rent</a>
+                <!--<a href="customer-sell-page.html" class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Sell</a>
+                <a href="#contact" class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Contact</a>-->
+                <div class="mt-4 px-4">
+                    <a href="login"><button class="bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-md text-white font-medium transition duration-300">Login / Register</button></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+  <main class="max-w-7xl mx-auto p-6">
+    <h1 class="text-3xl font-bold" style="padding: 20px;">Image:</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+      
+      <!-- Left: Image Gallery -->
+      <section>
+  <div class="border rounded-lg overflow-hidden">
+    <img id="mainImage" src="<%= property.image_data%>" alt="<%= property.title %>" class="w-full h-[400px] object-cover" />
+  </div>
+
+<h1  class="text-3xl font-bold" style="padding: 20px;">video:</h1>
+     <video controls style="max-width: 100%; border-radius: 8px; margin-bottom: 10px; padding-top: 10px;">
+      
+        <source src="<%= property.video %>" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+  <!--<div class="mt-4 flex space-x-3 overflow-x-auto thumbs">
+    <% property.image_data.forEach((img, idx) => { %>
+      <img 
+        src="<%= img %>" 
+        alt="Thumbnail <%= idx + 1 %>" 
+        class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-transparent hover:border-blue-700 transition"
+        onclick="document.getElementById('mainImage').src = this.src"
+        loading="lazy"
+      />
+    <% }) %>
+  </div>-->
+</section>
+
+      <!-- Right: Property Details -->
+      <section class="space-y-6">
+        <h1 class="text-3xl font-bold"><%= property.title %></h1>
+        <p class="text-blue-700 font-semibold text-xl">₦<%= property.amount.toLocaleString() %></p>
+        <p class="text-gray-600"><i class="fas fa-map-marker-alt mr-2 text-blue-700"></i><%= property.propertyAddress %></p>
+
+        <div class="flex space-x-6 text-gray-700">
+          <div class="flex items-center space-x-2">
+            <i class="fas fa-bed text-blue-700"></i>
+            <span><%= property.bedrooms %> Bedrooms</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <i class="fas fa-bath text-blue-700"></i>
+            <span><%= property.bathrooms %> Bathrooms</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <i class="fas fa-ruler-combined text-blue-700"></i>
+            <span><%= property.sqft %> sqft</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <i class="fas fa-tag text-blue-700"></i>
+            <span><%= property.rentSell  %></span>
+          </div>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-semibold mb-2">Description</h2>
+          <p class="text-gray-700 whitespace-pre-line"><%= property.description %></p>
+        </div>
+
+        <div class="border-t pt-6">
+          <h2 class="text-xl font-semibold mb-4">Contact Agent</h2>
+       <form id="contact-agent-form" class="space-y-4 max-w-md" method="post" action="detail-contact">
+    <!-- Message Display Container (Hidden by Default) -->
+                <div id="agent-form-message" class="mb-4 p-4 rounded-lg font-medium text-center transition-all duration-300 hidden">
+                    <!-- Success/Error Content Will Be Injected Here -->
+                </div>
+                
+                <input type="text" id="agent-name" name="name" placeholder="Your Name" required 
+                    class="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-700" />
+                
+                <input type="email" id="agent-email" name="email" placeholder="Your Email" required 
+                    class="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-700" />
+                
+                <input type="tel" id="agent-phone" name="phone" placeholder="Your Phone Number" required 
+                    class="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-700" />
+                
+                <textarea id="agent-message" name="message" rows="4" placeholder="Your Message" required 
+                        class="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-700">
+            I am interested in <%= property.title %>. Please contact me.
+                </textarea>
+                
+                <button type="submit" id="agent-submit-btn" 
+                        class="w-full bg-blue-700 text-white px-6 py-3 rounded-md hover:bg-blue-800 transition">
+                    Send Message
+                </button>
+        </form>
+          <p id="form-status" class="mt-2 text-green-600 hidden">Message sent successfully!</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+ <footer class="bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <div class="h-10 w-10 rounded-full bg-blue-700 flex items-center justify-center overflow-hidden">
+                        <img src="/img/Screenshot_20250927-131850_WhatsAppBusiness[1].jpg" 
+                            alt="Logo or Profile Image" 
+                            class="w-full h-full rounded-full object-cover">
+                        </div>
+                        <span class="ml-2 text-xl font-semibold">IBA REAL ESTATE</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        Your trusted partner in real estate for over 15 years. We connect people with properties that elevate their lives.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
+                        <li><a href="properties.html" class="text-gray-400 hover:text-white">Properties</a></li>
+                        <li><a href="#agents" class="text-gray-400 hover:text-white">Agents</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-white">About Us</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Services</h3>
+                    <ul class="space-y-2">
+                        <li><a href="/customer-buy-page.html" class="text-gray-400 hover:text-white">Buying</a></li>
+                        <!--<li><a href="sell-page.html" class="text-gray-400 hover:text-white">Selling</a></li>-->
+                        <li><a href="/customer-rent-page.html" class="text-gray-400 hover:text-white">Renting</a></li>
+                        <!--<li><a href="#" class="text-gray-400 hover:text-white">Property Management</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Commercial Real Estate</a></li>-->
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact Info</h3>
+                    <address class="not-italic text-gray-400">
+                        <p class="mb-2">SOUTH IBIE,ETSAKO WEST LGA
+</p>
+                        <p class="mb-2">AUCHI EDO STATE</p>
+                        <p class="mb-2">Phone: +234 806 322 2628</p>
+                        <p class="mb-2">Email: ibarealestate2023@gmail.com</p>
+                        <p class="mb-2">Hours: Mon-Fri 9am-6pm</p>
+                    </address>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 md:flex md:items-center md:justify-between">
+                <div class="flex space-x-6 md:order-2">
+                    <a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-white">Sitemap</a>
+                </div>
+                <p class="mt-8 text-base text-gray-400 md:mt-0 md:order-1">
+                    © 2025 IBA REAL ESTATE. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded - initializing scripts...');
+
+    // 1. Mobile Menu Toggle
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    if (mobileMenuButton) {
+        mobileMenuButton.addEventListener('click', () => {
+            const menu = document.getElementById('mobile-menu');
+            if (menu) menu.classList.toggle('hidden');
+        });
+    }
+
+    // 2. Smooth Scrolling for Anchor Links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', (e) => {
+            const targetId = anchor.getAttribute('href');
+            if (targetId === '#') return;
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                e.preventDefault();
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+                // Close mobile menu if open
+                const mobileMenu = document.getElementById('mobile-menu');
+                if (mobileMenu) mobileMenu.classList.add('hidden');
+            }
+        });
+    });
+
+    // 3. Login Check & Button Removal (Improved - Handles Desktop + Mobile)
+    const loginButtons = document.querySelectorAll('a[href="login"] button');
+    console.log(`Found ${loginButtons.length} login buttons to check.`);
+
+    fetch('/api/check-login', { credentials: 'include' })  // Include session cookies
+        .then(res => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+            return res.json();
+        })
+        .then(data => {
+            console.log('Login check response:', data);
+            if (data.loggedIn) {
+                // Remove ALL login buttons
+                loginButtons.forEach((button, index) => {
+                    if (button) {
+                        console.log(`Removing login button ${index + 1}`);
+                        button.remove();
+                    }
+                });
+
+                // Hide empty mobile login section
+                const mobileLoginSection = document.querySelector('#mobile-menu .mt-4.px-4');
+                if (mobileLoginSection && mobileLoginSection.children.length === 0) {
+                    mobileLoginSection.style.display = 'none';
+                    console.log('Mobile login section hidden');
+                }
+
+                console.log('All login buttons removed - User is logged in');
+            } else {
+                console.log('User  not logged in - Buttons remain visible');
+            }
+        })
+        .catch(err => {
+            console.error('Login check failed:', err);
+            // Fallback: Keep buttons visible on error (don't remove)
+            console.log('Error occurred - login buttons not removed');
+        });
+
+    // 4. Handle Requires-Login Elements (e.g., View Details links/buttons)
+    document.querySelectorAll('.requires-login').forEach(element => {
+        element.addEventListener('click', (e) => {
+            e.preventDefault();
+            fetch('/api/check-login', { credentials: 'include' })
+                .then(res => {
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    return res.json();
+                })
+                .then(data => {
+                    if (!data.loggedIn) {
+                        alert('Please log in to continue.');
+                        window.location.href = '/login';
+                    } else {
+                        console.log('Logged in - proceeding with action');
+                        if (element.tagName === 'A') {
+                            window.location.href = element.href;
+                        } else {
+                            // For buttons, trigger custom logic if needed
+                            element.click();  // Or your action
+                        }
+                    }
+                })
+                .catch(err => {
+                    console.error('Login check failed for requires-login:', err);
+                    window.location.href = '/login';
+                });
+        });
+    });
+
+    // 5. Contact Form Handler (#contact-form) - With Timeout & Messages
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        const submitBtn = document.getElementById('submit-btn');
+        const messageDiv = document.getElementById('form-message');
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(contactForm);
+            const data = Object.fromEntries(formData.entries());
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(data.email)) {
+                showFormMessage('Please enter a valid email address.', 'error', messageDiv);
+                return;
+            }
+
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Sending...';
+            }
+
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+            try {
+                const response = await fetch('/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify(data),
+                    credentials: 'include',
+                    signal: controller.signal
+                });
+
+                clearTimeout(timeoutId);
+                console.log('Contact form response status:', response.status);
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    showFormMessage(errorData.message || 'An error occurred.', 'error', messageDiv);
+                    return;
+                }
+
+                const result = await response.json();
+                if (result.success) {
+                    showFormMessage(result.message || 'Message sent successfully!', 'success', messageDiv);
+                    contactForm.reset();
+                } else {
+                    showFormMessage(result.message || 'Failed to send message.', 'error', messageDiv);
+                }
+            } catch (error) {
+                clearTimeout(timeoutId);
+                console.error('Contact form error:', error);
+                const msg = error.name === 'AbortError' ? 'Request timed out.' : 'Network error.';
+                showFormMessage(msg + ' Please try again.', 'error', messageDiv);
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Send Message';
+                }
+            }
+        });
+    }
+
+    // 6. Agent Contact Form Handler (#contact-agent-form) - Similar to Above
+    const agentForm = document.getElementById('contact-agent-form');
+    if (agentForm) {
+        const agentSubmitBtn = document.getElementById('agent-submit-btn');
+        const agentMessageDiv = document.getElementById('agent-form-message');
+
+        agentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(agentForm);
+            const data = Object.fromEntries(formData.entries());
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(data.email)) {
+                showFormMessage('Please enter a valid email address.', 'error', agentMessageDiv);
+                return;
+            }
+
+            if (agentSubmitBtn) {
+                agentSubmitBtn.disabled = true;
+                agentSubmitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Sending...';
+            }
+
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+            try {
+                const response = await fetch('/detail-contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify(data),
+                    credentials: 'include',
+                    signal: controller.signal
+                });
+
+                clearTimeout(timeoutId);
+                console.log('Agent form response status:', response.status);
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    showFormMessage(errorData.message || 'An error occurred.', 'error', agentMessageDiv);
+                    return;
+                }
+
+                const result = await response.json();
+                if (result.success) {
+                    showFormMessage(result.message || 'Enquiry sent to agent!', 'success', agentMessageDiv);
+                    agentForm.reset();
+                } else {
+                    showFormMessage(result.message || 'Failed to send enquiry.', 'error', agentMessageDiv);
+                }
+            } catch (error) {
+                clearTimeout(timeoutId);
+                console.error('Agent form error:', error);
+                const msg = error.name === 'AbortError' ? 'Request timed out.' : 'Network error.';
+                showFormMessage(msg + ' Please try again.', 'error', agentMessageDiv);
+            } finally {
+                if (agentSubmitBtn) {
+                    agentSubmitBtn.disabled = false;
+                    agentSubmitBtn.innerHTML = 'Send Message';
+                }
+            }
+        });
+    }
+
+    // 7. Services Dropdown Toggle (Unchanged)
+    const serviceToggle = document.getElementById('service-toggle');
+    const serviceMenu = document.getElementById('service-menu');
+    const dropdownIcon = serviceToggle?.querySelector('.dropdown-icon');
+    if (serviceToggle && serviceMenu) {
+        serviceToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isExpanded = serviceToggle.getAttribute('aria-expanded') === 'true';
+            serviceToggle.setAttribute('aria-expanded', !isExpanded);
+            serviceMenu.classList.toggle('show');
+            if (dropdownIcon) dropdownIcon.classList.toggle('rotated');
+        });
+
+        serviceMenu.querySelectorAll('[role="menuitem"]').forEach(item => {
+            item.addEventListener('click', () => {
+                serviceToggle.setAttribute('aria-expanded', 'false');
+                serviceMenu.classList.remove('show');
+                if (dropdownIcon) dropdownIcon.classList.remove('rotated');
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!serviceToggle.contains(e.target) && !serviceMenu.contains(e.target)) {
+                serviceToggle.setAttribute('aria-expanded', 'false');
+                serviceMenu.classList.remove('show');
+                if (dropdownIcon) dropdownIcon.classList.remove('rotated');
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && serviceMenu.classList.contains('show')) {
+                serviceToggle.setAttribute('aria-expanded', 'false');
+                serviceMenu.classList.remove('show');
+                if (dropdownIcon) dropdownIcon.classList.remove('rotated');
+                serviceToggle.focus();
+            }
+        });
+
+        serviceMenu.addEventListener('focusout', (e) => {
+            setTimeout(() => {
+                if (!serviceMenu.contains(document.activeElement)) {
+                    serviceToggle.setAttribute('aria-expanded', 'false');
+                    serviceMenu.classList.remove('show');
+                    if (dropdownIcon) dropdownIcon.classList.remove('rotated');
+                }
+            }, 100);
+        });
+    }
+
+    // 8. Other Features (Filters, Pagination, Lazy Loading) - Only if Elements Exist
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    if (filterTabs.length > 0) {
+        // Filter logic here (from your original - abbreviated for space)
+        filterTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                filterTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                const filterType = tab.getAttribute('data-filter');
+                // ... rest of filter logic
+                console.log(`Filter applied: ${filterType}`);
+            });
+        });
+    }
+
+    // Lazy loading (if images with data-src)
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src || img.src;
+                    img.classList.remove('lazy');
+                    imageObserver.unobserve(img);
+                }
+            });
+        });
+        document.querySelectorAll('img[data-src]').forEach(img => imageObserver.observe(img));
+    }
+
+    // Helper Function for Form Messages (Shared)
+    function showFormMessage(text, type, messageDiv) {
+        if (!messageDiv) return;
+        messageDiv.textContent = text;
+        const className = `mb-4 p-4 rounded-lg font-medium text-center transition-all duration-300 ${
+            type === 'success' ? 'bg-green-100 text-green-800 border border-green-300' : 'bg-red-100 text-red-800 border border-red-300'
+        }`;
+        messageDiv.className = className;
+        messageDiv.classList.remove('hidden');
+        setTimeout(() => messageDiv.classList.add('hidden'), 5000);
+    }
+
+    console.log('All scripts initialized.');
+});
+</script>
+</body>
+</html>
