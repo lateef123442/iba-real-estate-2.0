@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sell Your Home - IBA Real Estate and Consultant</title>
+  <!-- Google Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <style>
+    /* [All your existing CSS remains unchanged] */
+    /* Reset and base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background: #f5f7fa;
+      color: #222;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      scroll-behavior: smooth;
+    }
+    a {
+      color: #1761a0;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    a:hover, a:focus {
+      color: #003d66;
+      outline: none;
+    }
+    button {
+      cursor: pointer;
+      border: none;
+      background: #1761a0;
+      color: white;
+      font-weight: 600;
+      border-radius: 6px;
+      padding: 10px 16px;
+      font-size: clamp(0.9rem, 1vw + 0.3rem, 1.1rem);
+      transition: background-color 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      user-select: none;
+    }
+    button:disabled {
+      background: #a0b8cf;
+      cursor: not-allowed;
+    }
+    button:hover:not(:disabled), button:focus-visible:not(:disabled) {
+      background: #004080;
+      outline: none;
+    }
+    input, select, textarea {
+      font-family: inherit;
+      font-size: clamp(0.9rem, 1vw + 0.3rem, 1rem);
+      padding: 11px 14px;
+      border-radius: 6px;
+      border: 1.5px solid #cfdde8;
+      transition: border-color 0.3s ease;
+      width: 100%;
+      max-width: 600px;
+      box-sizing: border-box;
+      color: #222;
+      resize: vertical;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #1761a0;
+      box-shadow: 0 0 6px #1761a0aa;
+    }
+    label {
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: inline-block;
+      font-size: clamp(0.85rem, 1vw + 0.1rem, 0.95rem);
+      color: #444;
+      user-select: none;
+    }
+    header {
+      height: 64px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: saturate(180%) blur(12px);
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgb(0, 0, 0, 0.06);
+    }
+    .logo {
+      font-weight: 800;
+      font-size: 1.5rem;
+      color: #1761a0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      user-select: none;
+    }
+    .logo .material-icons {
+      color: #0d3a66;
+      font-size: 1.8rem;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto 60px;
+      padding: 0 20px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgb(0, 0, 0, 0.08);
+      padding: 40px 32px;
+    }
+    h1 {
+      font-weight: 900;
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: #0d3a66;
+      margin-bottom: 20px;
+      user-select: none;
+    }
+    form > div {
+      margin-bottom: 24px;
+    }
+    textarea {
+      min-height: 100px;
+    }
+    .submit-btn {
+      padding: 16px 36px;
+      font-size: 1.15rem;
+      border-radius: 14px;
+      font-weight: 700;
+      user-select: none;
+    }
+    .confirmation {
+      margin-top: 24px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: green;
+      user-select: none;
+    }
+    .wizard-progress {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+      color: #1761a0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .progress-bar-container {
+      width: 100%;
+      background-color: #e0e0e0;
+      border-radius: 6px;
+      overflow: hidden;
+      height: 10px;
+      margin-top: 10px;
+      display: flex;
+    }
+    .progress-bar {
+      height: 100%;
+      background-color: #1761a0;
+      transition: width 0.3s ease;
+    }
+    .step {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+    .step.active {
+      display: block;
+      opacity: 1;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 20px;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .navigation-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    .prev-btn {
+      width: 48%;
+      background: #6c757d;
+    }
+    .next-btn, .submit-btn {
+      width: 48%;
+    }
+    .naira-input {
+      display: inline;
+      position: relative;
+      width: 100%;
+    }
+    .naira-input span.symbol {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-weight: 700;
+      color: #444;
+    }
+    .naira-input input {
+      padding: 12px 15px 12px 40px;
+    }
+    .image-preview-container {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .error-message {
+      color: #e03e2f;
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+    /* Wizard-specific styles */
+    .wizard-step-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      color: #1761a0;
+    }
+    .wizard-step-header .material-icons {
+      font-size: 24px;
+    }
+  </style>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div id="app" role="application">
+    <aside class="sidebar" aria-label="Main navigation">
+      <nav aria-label="Primary navigation">
+        <a href="track-sales.html" tabindex="0" aria-label="Track Sales">
+          <span class="material-icons" aria-hidden="true">assessment</span>DASHBOARD
+        </a>
+        <a href="index.html" tabindex="0" aria-label="Home">
+          <span class="material-icons" aria-hidden="true">home</span>Available properties
+        </a>
+        <a href="sell-page.html" tabindex="0" aria-label="Sell Homes" class="active">
+          <span class="material-icons" aria-hidden="true">sell</span>Sell
+        </a>
+        <% if (isAdmin) { %>
+          <a href="sales-approval.html" tabindex="0" aria-label="Sales Approval">
+            <span class="material-icons" aria-hidden="true">check_circle</span>Sales Approval
+          </a>
+          <a href="tour-requested.html" tabindex="0" aria-label="Tour Requested">
+            <span class="material-icons" aria-hidden="true">event_available</span>Tour Requested
+          </a>
+          <a href="view-customers.html" tabindex="0" aria-label="View All Customers">
+            <span class="material-icons" aria-hidden="true">people</span>View All Customers
+          </a>
+          <a href="sold-properties.html" tabindex="0" aria-label="Track Sales">
+            <span class="material-icons" aria-hidden="true">check_circle</span>Sold property
+          </a>
+          <a href="setting-page.html" tabindex="0" aria-label="Settings">
+            <span class="material-icons" aria-hidden="true">settings</span>Settings
+          </a>
+        <% } %>
+      </nav>
+      <footer>
+        &copy; 2025 Iba Real Estate. All rights reserved.
+      </footer>
+    </aside>
+
+    <header role="banner" aria-label="Primary header">
+      <div class="header-left">
+        <button class="sidebar-toggle-btn material-icons" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="sidebar">menu</button>
+        <a href="#" class="logo" aria-label="IBA Real Estate Home">
+          <span class="material-icons" aria-hidden="true">apartment</span>IBA Real Estate And Consultant
+        </a>
+        <nav class="primary-nav" role="navigation" aria-label="Primary site navigation">
+          <a href="buy-page.html">Buy</a>
+          <a href="sell-page.html" class="active">Sell</a>
+        </nav>
+      </div>
+      <div class="header-right">
+        <button class="icon-btn" aria-label="Notifications" aria-haspopup="true" aria-expanded="false">
+          <a href="notificatin-page.html"><span class="material-icons">notifications</span></a>
+        </button>
+        <button class="icon-btn" aria-label="User profile menu" aria-haspopup="true" aria-expanded="false">
+          <a href="profile-page.html"><span class="material-icons">person</span></a>
+        </button>
+      </div>
+    </header>
+
+    <main class="container" role="main" aria-label="Sell your home wizard">
+      <img src="/images/iba-logo.png" alt="IBA Real Estate Logo" class="logo" style="width: 120px; height: auto; margin-bottom: 20px;">
+      <h1>Sell Your Home</h1>
+      <p>If you're ready to sell your home, complete the wizard below and our agents will contact you with a free consultation and valuation.</p>
+      
+      <div class="wizard-progress" id="progress">
+        Step 1 of 5: <span class="material-icons">person</span> Personal Information
+        <div class="progress-bar-container">
+          <div id="progressBar" class="progress-bar"></div>
+        </div>
+      </div>
+      
+      <form id="sell-form" method="POST" action="/upload" enctype="multipart/form-data">
+        <div class="step" id="step1">
+          <div class="wizard-step-header"><span class="material-icons">person</span> Step 1: Personal Information</div>
+          <div id="form-desc" style="margin-bottom: 20px; color:#666;">* Required fields</div>
+          <div>
+            <label for="ownerName">Your Full Name *</label>
+            <input type="text" id="ownerName" name="ownerName" required autocomplete="name" />
+            <div class="error-message" id="errorOwnerName"></div>
+          </div>
+          <div>
+            <label for="ownerEmail">Email Address *</label>
+            <input type="email" id="ownerEmail" name="ownerEmail" required autocomplete="email" />
+            <div class="error-message" id="errorOwnerEmail"></div>
+          </div>
+          <div>
+            <label for="ownerPhone">Phone Number *</label>
+            <input type="tel" id="ownerPhone" name="ownerPhone" required autocomplete="tel" />
+            <div class="error-message" id="errorOwnerPhone"></div>
+          </div>
+        </div>
+        
+        <div class="step" id="step2">
+          <div class="wizard-step-header"><span class="material-icons">home</span> Step 2: Property Details</div>
+          <div>
+            <label for="propertyAddress">Property Address *</label>
+            <input type="text" id="propertyAddress" name="propertyAddress" required placeholder="Street, City, State, ZIP" autocomplete="street-address" />
+            <div class="error-message" id="errorPropertyAddress"></div>
+          </div>
+          <div>
+            <label for="bedrooms">Bedrooms *</label>
+            <select id="bedrooms" name="bedrooms" required>
+              <option value="" disabled selected>Select number</option>
+              <option>0</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5+</option>
+            </select>
+            <div class="error-message" id="errorBedrooms"></div>
+          </div>
+          <div>
+            <label for="bathrooms">Bathrooms *</label>
+            <select id="bathrooms" name="bathrooms" required>
+              <option value="" disabled selected>Select number</option>
+              <option>0</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4+</option>
+            </select>
+            <div class="error-message" id="errorBathrooms"></div>
+          </div>
+          <div>
+            <label for="sqft">Square Footage *</label>
+            <input type="number" id="sqft" name="sqft" min="100" max="100000" required />
+            <div class="error-message" id="errorSqft"></div>
+          </div>
+        </div>
+        
+        <div class="step" id="step3">
+          <div class="wizard-step-header"><span class="material-icons">description</span> Step 3: Property Info</div>
+          <div>
+            <label for="title">Title *</label>
+            <input type="text" id="title" name="title" placeholder="e.g., Beautiful modern home with spacious backyard" required />
+            <div class="error-message" id="errorTitle"></div>
+          </div>
+          <div>
+            <label for="description">Description *</label>  <!-- Fixed: for="description" -->
+            <textarea id="description" name="description" placeholder="Provide a detailed description of the property" required></textarea>
+            <div class="error-message" id="errorDescription"></div>  <!-- Fixed: id="errorDescription" -->
+          </div>
+          <div>
+            <label for="rentSell">Rent/Sell *</label>
+            <select id="rentSell" name="rentSell" required>
+              <option value="" disabled selected>Rent/Sell</option>
+              <option>Rent</option>
+              <option>Sell</option>
+            </select>
+            <div class="error-message" id="errorRentSell"></div>
+          </div>
+          <div>
+            <label for="property-type">Property Type *</label>
+            <select id="property-type" name="property_type" required>
+              <option value="" disabled selected>Property Type</option>
+              <option>Self Contain</option>
+              <option>Plots of Land</option>
+              <option>Duplex/Bungalow/Storey Building</option>
+            </select>
+            <div class="error-message" id="errorPropertyType"></div>
+          </div>
+          <div>
+            <label for="amount">Enter Amount in Naira *</label>
+            <div class="naira-input">
+              <span class="symbol">₦</span>
+              <input type="text" id="amount" name="amount" placeholder="Enter amount" autocomplete="off" required />
+            </div>
+            <div class="error-message" id="errorAmount"></div>
+          </div>
+        </div>
+        
+        <div class="step" id="step4">
+          <div class="wizard-step-header"><span class="material-icons">upload</span> Step 4: Upload Media</div>
+          <div>
+            <label for="image">Upload Images *</label>
+            <input type="file" id="image" name="image" accept="image/*" required multiple />
+            <div id="image-preview" class="image-preview-container"></div>
+            <div class="error-message" id="errorImage"></div>
+          </div>
+          <div>
+            <label for="video">Upload Video *</label>
+            <input type="file" id="video" name="video" accept="video/*" required multiple />
+            <div id="video-preview" class="image-preview-container" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 10px;"></div>
+            <div class="error-message" id="errorVideo"></div>
+          </div>
+        </div>
+        
+        <div class="step" id="step5">
+          <div class="wizard-step-header"><span class="material-icons">checklist</span> Step 5: Review</div>
+          <h2>Review Your Information</h2>
+          <p>Please review the details below before submitting:</p>
+          <div id="summary">
+            <p><strong>Name:</strong> <span id="summaryOwnerName"></span></p>
+            <p><strong>Email:</strong> <span id="summaryOwnerEmail"></span></p>
+            <p><strong>Phone:</strong> <span id="summaryOwnerPhone"></span></p>
+            <p><strong>Property Address:</strong> <span id="summaryPropertyAddress"></span></p>
+            <p><strong>Bedrooms:</strong> <span id="summaryBedrooms"></span></p>
+            <p><strong>Bathrooms:</strong> <span id="summaryBathrooms"></span></p>
+            <p><strong>Square Footage:</strong> <span id="summarySqft"></span></p>
+            <p><strong>Title:</strong> <span id="summaryTitle"></span></p>
+            <p><strong>Description:</strong> <span id="summaryDescription"></span></p>  <!-- Added for new field -->
+            <p><strong>Rent/Sell:</strong> <span id="summaryRentSell"></span></p>
+            <p><strong>Property Type:</strong> <span id="summaryPropertyType"></span></p>
+            <p><strong>Amount:</strong> <span id="summaryAmount"></span></p>
+            <p><strong>Images:</strong> <span id="summaryImage">Uploaded files will be listed here</span></p>
+            <p><strong>Video:</strong> <span id="summaryVideo">Uploaded files will be listed here</span></p>
+          </div>
+        </div>
+        
+        <!-- Navigation Buttons -->
+        <div class="navigation-buttons">
+          <button id="prevBtn" class="prev-btn">Previous</button>
+          <button id="nextBtn" class="next-btn submit-btn" type="button">Next</button>
+        </div>
+      </form>
+      
+      <!-- Confirmation Message (hidden initially) -->
+      <div id="confirmation" class="confirmation" style="display: none;">Your home listing has been submitted successfully! Our agents will contact you soon.</div>
+      
+          <!-- Script for Wizard Functionality -->
+<script>
+  const steps = document.querySelectorAll('.step');
+  const progressBar = document.getElementById('progressBar');
+  const progressText = document.getElementById('progress');
+  let currentStep = 0;
+
+  function showStep(stepIndex) {
+    console.log('Showing step:', stepIndex);  // Debug log
+    steps.forEach((step, index) => {
+      step.classList.toggle('active', index === stepIndex);
+    });
+
+    const progressPercentage = ((stepIndex + 1) / steps.length) * 100;
+    progressBar.style.width = progressPercentage + '%';
+    progressText.innerHTML = `Step ${stepIndex + 1} of ${steps.length}: <span class="material-icons">${getStepIcon(stepIndex)}</span> ${getStepLabel(stepIndex)}`;
+
+    document.getElementById('prevBtn').style.display = stepIndex > 0 ? 'block' : 'none';
+    const nextBtn = document.getElementById('nextBtn');
+    nextBtn.textContent = stepIndex < steps.length - 1 ? 'Next' : 'Submit';
+    nextBtn.type = stepIndex < steps.length - 1 ? 'button' : 'submit';
+  }
+
+  function getStepIcon(stepIndex) {
+    const icons = ['person', 'home', 'description', 'upload', 'checklist'];
+    return icons[stepIndex] || 'help';
+  }
+
+  function getStepLabel(stepIndex) {
+    const labels = ['Personal Information', 'Property Details', 'Property Info', 'Upload Media', 'Review'];
+    return labels[stepIndex] || 'Unknown';
+  }
+
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    console.log('Next button clicked. Current step:', currentStep);  // Debug log
+    if (currentStep < steps.length - 1) {
+      if (validateStep(currentStep)) {
+        currentStep++;
+        showStep(currentStep);
+      } else {
+        console.log('Validation failed for step:', currentStep);  // Debug log
+        alert('Please fix the errors below before proceeding.');  // User-friendly alert
+      }
+    }
+  });
+
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    console.log('Previous button clicked. Current step:', currentStep);  // Debug log
+    if (currentStep > 0) {
+      currentStep--;
+      showStep(currentStep);
+    }
+  });
+
+  function validateStep(stepIndex) {
+    console.log('Validating step:', stepIndex);  // Debug log
+    let isValid = true;
+    const requiredFields = steps[stepIndex].querySelectorAll('[required]');
+    const stepErrors = [];  // Collect errors for better feedback
+
+    requiredFields.forEach(field => {
+      console.log('Checking field:', field.id, 'Value:', field.value);  // Debug log for each field
+      const errorId = getErrorId(field.id);  // Use helper to generate correct ID
+      const errorElement = document.getElementById(errorId);
+
+      if (!errorElement) {
+        console.error('Error element not found for field:', field.id, 'Expected ID:', errorId);
+        return;
+      }
+
+      // Clear previous error
+      errorElement.textContent = '';
+
+      if (field.type === 'file') {
+        if (field.files.length === 0) {
+          errorElement.textContent = 'Please select at least one file.';
+          isValid = false;
+          stepErrors.push(field.id);
+        }
+      } else if (field.tagName === 'SELECT') {
+        // Check if value is empty or the placeholder (first option)
+        if (!field.value || field.value === field.options[0].value) {
+          errorElement.textContent = 'Please select a valid option.';
+          isValid = false;
+          stepErrors.push(field.id);
+        }
+      } else if (field.id === 'amount') {
+        // Special validation for Amount: Must be a number and not empty
+        const value = field.value.trim();
+        if (!value) {
+          errorElement.textContent = 'This field is required.';
+          isValid = false;
+          stepErrors.push(field.id);
+        } else if (isNaN(value) || parseFloat(value) <= 0) {
+          errorElement.textContent = 'Please enter a valid positive number.';
+          isValid = false;
+          stepErrors.push(field.id);
+        }
+      } else {
+        // General text input validation
+        if (!field.value || !field.value.trim()) {
+          errorElement.textContent = 'This field is required.';
+          isValid = false;
+          stepErrors.push(field.id);
+        }
+      }
+    });
+
+    console.log('Validation result for step', stepIndex, ':', isValid, 'Errors:', stepErrors);  // Debug log for result
+    return isValid;
+  }
+
+  // Helper to generate correct error ID (handles hyphens and capitalization)
+  function getErrorId(fieldId) {
+    return 'error' + fieldId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+  }
+
+  showStep(currentStep);
+
+  // Removed e.preventDefault() to allow backend submission
+  // Removed summary population and confirmation since the form will submit
+  document.getElementById('sell-form').addEventListener('submit', function(e) {
+    // Form will now submit to /upload on the backend
+    // Handle success/error on the server-side (e.g., redirect or show messages)
+  });
+</script>
+    </main>
+  </div>
+</body>
+</html>

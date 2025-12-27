@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - IBA Real Estate and Consultant</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background: #f5f7fa;
+      color: #222;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+          background-image: url('/img/Screenshot_20250927-131850_WhatsAppBusiness[1].jpg');
+       background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+    }
+    .login-container {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      width: 400px;
+      max-width: 95%;
+    }
+    .login-container h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #1761a0;
+    }
+    .login-container p {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #1761a0;
+      font-size: 30px;
+      font-weight: 900;
+    }
+    .wizard-progress {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+      color: #1761a0;
+    }
+    .step {
+      display: none; /* Hide all steps by default */
+    }
+    .step.active {
+      display: block; /* Show the active step */
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #444;
+    }
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      border: 1.5px solid #cfdde8;
+      border-radius: 6px;
+      font-size: 1rem;
+      color: #222;
+      transition: border-color 0.3s ease;
+    }
+    input:focus {
+      border-color: #1761a0;
+      box-shadow: 0 0 6px #1761a0aa;
+      outline: none;
+    }
+    .input-container {
+      position: relative;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #1761a0;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #1761a0;
+      color: white;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 10px;
+    }
+    button.prev-btn {
+      background: #6c757d; /* Gray for previous button */
+    }
+    button.prev-btn:hover {
+      background: #5a6268;
+    }
+    button.next-btn, button.submit-btn {
+      background: #1761a0;
+    }
+    button.next-btn:hover, button.submit-btn:hover {
+      background: #004080;
+    }
+    .error-msg {
+      color: #e03e2f;
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+    .success-msg {
+      color: green;
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+    .navigation-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    .prev-btn {
+      width: 48%;
+    }
+    .next-btn, .submit-btn {
+      width: 48%;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <p>IBA REAL ESTATE AND CONSULTANT</p>
+    <hr>
+    <h1>Signin</h1>
+    <div class="wizard-progress" id="progress">Step 1 of 4: Personal Information</div>
+    
+    <form id="signupForm" method="POST" action="submit">
+      <div class="step" id="step1">
+        <div class="form-group">
+          <label for="firstName">First Name <sup aria-hidden="true" style="color:#e03e2f;">*</sup></label>
+          <input type="text" id="firstName" name="firstName" autocomplete="given-name" required />
+          <div class="error-message" id="errorFirstName"></div>
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name <sup aria-hidden="true" style="color:#e03e2f;">*</sup></label>
+          <input type="text" id="lastName" name="lastName" autocomplete="family-name" required />
+          <div class="error-message" id="errorLastName"></div>
+        </div>
+      </div>
+      
+      <div class="step" id="step2">
+        <div class="form-group">
+          <label for="middleName">Middle Name</label>
+          <input type="text" id="middleName" name="middleName" autocomplete="additional-name" />
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number <sup aria-hidden="true" style="color:#e03e2f;">*</sup></label>
+          <input type="tel" id="phone" name="phone" pattern="^\+?\d{10,15}$" placeholder="+1234567890" required />
+          <div class="error-message" id="errorPhone"></div>
+        </div>
+      </div>
+      
+      <div class="step" id="step3">
+        <div class="form-group">
+          <label for="email">Email <sup aria-hidden="true" style="color:#e03e2f;">*</sup></label>
+          <input type="email" id="email" name="email" autocomplete="email" required />
+          <div class="error-message" id="errorEmail"></div>
+        </div>
+      </div>
+      
+      <div class="step" id="step4">
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-container">
+            <input type="password" id="password" name="password" placeholder="Enter password" required autocomplete="new-password" />
+            <span class="material-icons toggle-password" id="togglePassword">visibility</span>
+          </div>
+          <div class="error-message" id="passwordError"></div>
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <div class="input-container">
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required autocomplete="new-password" />
+            <span class="material-icons toggle-password" id="toggleConfirmPassword">visibility</span>
+          </div>
+          <div class="error-message" id="confirmError"></div>
+        </div>
+      </div>
+      
+      <div class="navigation-buttons">
+        <button type="button" id="prevBtn" class="prev-btn" style="display: none;">Previous</button>
+        <button type="button" id="nextBtn" class="next-btn">Next</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    let currentStep = 1;
+    const steps = document.querySelectorAll('.step');
+    const progress = document.getElementById('progress');
+    const nextBtn = document.getElementById('nextBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const form = document.getElementById('signupForm');
+
+    // Show the first step
+    showStep(currentStep);
+
+    function showStep(step) {
+      steps.forEach((s, index) => s.classList.remove('active'));
+      document.getElementById(`step${step}`).classList.add('active');
+      progress.textContent = `Step ${step} of 4: ${getStepTitle(step)}`;
+      
+      if (step === 1) {
+        prevBtn.style.display = 'none';
+      } else {
+        prevBtn.style.display = 'block';
+      }
+      
+      if (step === 4) {
+        nextBtn.textContent = 'Submit';
+        nextBtn.type = 'submit';  // Change to submit on last step
+      } else {
+        nextBtn.textContent = 'Next';
+        nextBtn.type = 'button';
+      }
+    }
+
+    function getStepTitle(step) {
+      switch(step) {
+        case 1: return 'Personal Information';
+        case 2: return 'Contact Information';
+        case 3: return 'Email Verification';
+        case 4: return 'Account Security';
+        default: return '';
+      }
+    }
+
+    nextBtn.addEventListener('click', function() {
+      if (currentStep < 4) {
+        if (validateStep(currentStep)) {
+          currentStep++;
+          showStep(currentStep);
+        }
+      } else {
+        // Form submission handled by the form
+        form.submit();
+      }
+    });
+
+    prevBtn.addEventListener('click', function() {
+      if (currentStep > 1) {
+        currentStep--;
+        showStep(currentStep);
+      }
+    });
+
+    function validateStep(step) {
+      let valid = true;
+      const errorElements = {
+        1: ['errorFirstName', 'errorLastName'],
+        2: ['errorPhone'],
+        3: ['errorEmail'],
+        4: ['passwordError', 'confirmError']
+      };
+
+      // Clear errors
+      errorElements[step].forEach(id => document.getElementById(id).textContent = '');
+
+      switch(step) {
+        case 1:
+          if (!form.firstName.value.trim()) {
+            document.getElementById('errorFirstName').textContent = 'First Name is required.';
+            valid = false;
+          }
+          if (!form.lastName.value.trim()) {
+            document.getElementById('errorLastName').textContent = 'Last Name is required.';
+            valid = false;
+          }
+          break;
+        case 2:
+          if (!form.phone.value.trim() || !/^\+?\d{10,15}$/.test(form.phone.value.trim())) {
+            document.getElementById('errorPhone').textContent = 'Please enter a valid phone number.';
+            valid = false;
+          }
+          break;
+        case 3:
+          if (!form.email.value.trim() || !/^\S+@\S+\.\S+$/.test(form.email.value.trim())) {
+            document.getElementById('errorEmail').textContent = 'Please enter a valid email address.';
+            valid = false;
+          }
+          break;
+        case 4:
+          if (!form.password.value.trim() || form.password.value.trim().length < 6) {
+            document.getElementById('passwordError').textContent = 'Password must be at least 6 characters.';
+            valid = false;
+          }
+          if (form.confirmPassword.value.trim() !== form.password.value.trim()) {
+            document.getElementById('confirmError').textContent = 'Passwords do not match.';
+            valid = false;
+          }
+          break;
+      }
+      return valid;
+    }
+
+    // Toggle password visibility
+    document.getElementById('togglePassword').addEventListener('click', function() {
+      const type = document.getElementById('password').getAttribute('type') === 'password' ? 'text' : 'password';
+      document.getElementById('password').setAttribute('type', type);
+      this.textContent = type === 'password' ? 'visibility' : 'visibility_off';
+    });
+
+    document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
+      const type = document.getElementById('confirmPassword').getAttribute('type') === 'password' ? 'text' : 'password';
+      document.getElementById('confirmPassword').setAttribute('type', type);
+      this.textContent = type === 'password' ? 'visibility' : 'visibility_off';
+    });
+
+    form.addEventListener('submit', function(event) {
+      if (!validateStep(4)) {
+        event.preventDefault();  // Prevent submission if final step is invalid
+      }
+    });
+  </script>
+</body>
+</html>
