@@ -1,4 +1,13 @@
-"dependencies": {
+{
+  "name": "iba-real-estate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "newapp.js",
+  "scripts": {
+    "start": "node newapp.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
@@ -12,3 +21,4 @@
     "session": "^0.1.0",
     "validator": "^13.15.15"
   }
+}
