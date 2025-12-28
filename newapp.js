@@ -100,7 +100,7 @@ const connection = mysql.createConnection({
     port: Number(process.env.DB_PORT),
     multipleStatements: process.env.DB_MULTIPLE_STATEMENTS === 'true',
     queueLimit: Number(process.env.DB_QUEUE_LIMIT),
-    acquireTimeout: Number(process.env.DB_ACQUIRE_TIMEOUT)
+    acquireTimeout: Number(process.env.DB_ACQUIRE_TIMEOUT),
     ssl: {
     rejectUnauthorized: false // This allows the Aiven SSL connection
   }
