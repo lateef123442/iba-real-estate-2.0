@@ -6,13 +6,13 @@ services:
     buildCommand: npm install
     startCommand: node newapp.js
     envVars:
-      - key: mysql-74c581-ibarealestate.i.aivencloud.com
-        sync: false # You will set this in the dashboard
-      - key: avnadmin
-        sync: false
-      - key: AVNS_7legHqlZHFCO9Evp2Hz
-        sync: false
-      - key: iba_real_estate
-        sync: false
-      - key: 20346
-        sync: false
+      - key: DB_HOST
+        value: mysql-74c581-ibarealestate.i.aivencloud.com
+      - key: DB_USER
+        value: avnadmin
+      - key: DB_PASSWORD
+        value: AVNS_7legHqlZHFCO9Evp2Hz
+      - key: DB_DATABASE
+        value: iba_real_estate
+      - key: DB_PORT
+        value: "20346" # Quotes are needed because it's a number
